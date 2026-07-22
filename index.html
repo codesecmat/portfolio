@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+<!-- STYLING TOUCH/MODIFY LATER-->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e27;
+            --bg-secondary: #1a1f3a;
+            --bg-tertiary: #252b4a;
+            --accent-1: #00d9ff;
+            --accent-2: #2c00ff;
+            --accent-3: #ffed00;
+            --text-primary: #e0e6ff;
+            --text-secondary: #8b92b8;
+            --cube-size: 24px;
+            --transition-speed: 0.4s;
+        }
+
+        .light {
+            --bg-primary: #f5f7fa;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #e8ecf2;
+            --accent-1: #0066cc;
+            --accent-2: #c200a6;
+            --accent-3: #ff9500;
+            --text-primary: #1a1f36;
+            --text-secondary: #6b7280;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 30%, rgba(0, 217, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255, 0, 234, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2), var(--accent-3));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+            animation: titlePulse 3s ease-in-out infinite;
+        }
+
+        @keyframes titlePulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.9; transform: scale(1.02); }
+        }
+
+        .index-section {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all var(--transition-speed) ease;
+        }
+
+        .index-section:hover {
+            box-shadow: 0 12px 48px rgba(0, 217, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            padding: 1.5rem;
+            cursor: pointer;
+            user-select: none;
+            gap: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .section-header:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .section-header:active {
+            transform: scale(0.98);
+        }
+
+        /* 3D Cube Radio Button */
+        .cube-container {
+            perspective: 1000px;
+            width: var(--cube-size);
+            height: var(--cube-size);
+            flex-shrink: 0;
+        }
+
+        .cube {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform var(--transition-speed) cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .cube-face {
+            position: absolute;
+            width: var(--cube-size);
+            height: var(--cube-size);
+            border: 2px solid var(--accent-1);
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.2), rgba(0, 217, 255, 0.05));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            box-shadow: inset 0 0 10px rgba(0, 217, 255, 0.3);
+        }
+
+        .cube-face::before {
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: var(--accent-1);
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            box-shadow: 0 0 10px var(--accent-1);
+        }
+
+        .cube-face.front  { transform: rotateY(0deg) translateZ(calc(var(--cube-size) / 2)); }
+        .cube-face.back   { transform: rotateY(180deg) translateZ(calc(var(--cube-size) / 2)); }
+        .cube-face.right  { transform: rotateY(90deg) translateZ(calc(var(--cube-size) / 2)); }
+        .cube-face.left   { transform: rotateY(-90deg) translateZ(calc(var(--cube-size) / 2)); }
+        .cube-face.top    { transform: rotateX(90deg) translateZ(calc(var(--cube-size) / 2)); }
+        .cube-face.bottom { transform: rotateX(-90deg) translateZ(calc(var(--cube-size) / 2)); }
+
+        input[type="radio"] {
+            display: none;
+        }
+
+        input[type="radio"]:checked + .section-header .cube {
+            transform: rotateY(180deg) rotateX(180deg);
+        }
+
+        input[type="radio"]:checked + .section-header .cube-face::before {
+            opacity: 1;
+        }
+
+        input[type="radio"]:checked + .section-header .cube-face {
+            border-color: var(--accent-2);
+            background: linear-gradient(135deg, rgba(8, 0, 255, 0.3), rgba(255, 0, 234, 0.1));
+            box-shadow: inset 0 0 15px rgba(8, 0, 255, 0.5), 0 0 20px rgba(20, 0, 255, 0.3);
+        }
+
+        input[type="radio"]:checked + .section-header .cube-face::before {
+            background: var(--accent-2);
+            box-shadow: 0 0 15px var(--accent-2);
+        }
+
+        .section-title {
+            flex: 1;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .chevron {
+            width: 24px;
+            height: 24px;
+            transition: transform var(--transition-speed) ease;
+            color: var(--accent-1);
+        }
+
+        input[type="radio"]:checked + .section-header .chevron {
+            transform: rotate(180deg);
+            color: var(--accent-2);
+        }
+
+        .section-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height var(--transition-speed) ease, padding var(--transition-speed) ease;
+        }
+
+        input[type="radio"]:checked ~ .section-content {
+            max-height: 1000px;
+            padding: 0 1.5rem 1.5rem 1.5rem;
+        }
+
+        .content-text {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Sub-sections */
+        .sub-section {
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            margin-top: 1rem;
+            overflow: hidden;
+            border-left: 3px solid var(--accent-3);
+            animation: fadeInUp 0.6s ease;
+            animation-delay: 0.1s;
+            animation-fill-mode: both;
+        }
+
+        .sub-section:nth-child(2) { animation-delay: 0.2s; }
+        .sub-section:nth-child(3) { animation-delay: 0.3s; }
+
+        .sub-header {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            cursor: pointer;
+            gap: 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .sub-header:hover {
+            background: rgba(255, 237, 0, 0.1);
+        }
+
+        .sub-cube-container {
+            perspective: 800px;
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+
+        .sub-cube {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .sub-cube-face {
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--accent-3);
+            background: linear-gradient(135deg, rgba(255, 237, 0, 0.2), rgba(255, 237, 0, 0.05));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 0 8px rgba(255, 237, 0, 0.3);
+        }
+
+        .sub-cube-face::before {
+            content: '';
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--accent-3);
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            box-shadow: 0 0 8px var(--accent-3);
+        }
+
+        .sub-cube-face.front  { transform: rotateY(0deg) translateZ(9px); }
+        .sub-cube-face.back   { transform: rotateY(180deg) translateZ(9px); }
+        .sub-cube-face.right  { transform: rotateY(90deg) translateZ(9px); }
+        .sub-cube-face.left   { transform: rotateY(-90deg) translateZ(9px); }
+        .sub-cube-face.top    { transform: rotateX(90deg) translateZ(9px); }
+        .sub-cube-face.bottom { transform: rotateX(-90deg) translateZ(9px); }
+
+        input[type="checkbox"]:checked + .sub-header .sub-cube {
+            transform: rotateY(180deg) rotateX(180deg);
+        }
+
+        input[type="checkbox"]:checked + .sub-header .sub-cube-face::before {
+            opacity: 1;
+        }
+
+        .sub-title {
+            flex: 1;
+            font-weight: 600;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+        }
+
+        .sub-chevron {
+            width: 20px;
+            height: 20px;
+            transition: transform 0.3s ease;
+            color: var(--accent-3);
+        }
+
+        input[type="checkbox"]:checked + .sub-header .sub-chevron {
+            transform: rotate(180deg);
+        }
+
+        .sub-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+
+        input[type="checkbox"]:checked ~ .sub-content {
+            max-height: 500px;
+            padding: 0 1rem 1rem 1rem;
+        }
+
+        .sub-content-text {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            font-size: 1rem;
+            padding-left: 2rem;
+        }
+
+        input[type="checkbox"] {
+            display: none;
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 1rem 0.5rem;
+            }
+
+            .section-header {
+                padding: 1rem;
+            }
+
+            input[type="radio"]:checked ~ .section-content {
+                padding: 0 1rem 1rem 1rem;
+            }
+        }
+    </style>
+</head>
+
+<!-- END OF STYLING -->
+
+
+<!-- BEGINNING OF THE TEXT/CONTENT -->
+<body>
+
+    <div class="container">
+        <h1>PORTFOLIO</h1>
+
+        <!-- Section PORTFOLIO TOP -->
+        <div class="index-section">
+            <input type="radio" name="section" id="section0">
+            <label for="section0" class="section-header">
+                <div class="cube-container">
+                    <div class="cube">
+                        <div class="cube-face front"></div>
+                        <div class="cube-face back"></div>
+                        <div class="cube-face right"></div>
+                        <div class="cube-face left"></div>
+                        <div class="cube-face top"></div>
+                        <div class="cube-face bottom"></div>
+                    </div>
+                </div>
+                <span class="section-title">Professional Summary</span>
+                <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </label>
+            <div class="section-content">
+                <p class="content-text">
+Passionate cybersecurity enthusiast with hands-on experience building a personal home lab
+focused on networking, virtualization, Linux administration, threat intelligence, automation,
+and defensive security. I enjoy designing secure environments, automating repetitive tasks,
+and experimenting with enterprise technologies in a safe lab environment
+                </p>
+
+
+                <!-- SUB SECTION -->
+                <div class="sub-section">
+                    <input type="checkbox" id="sub0-1">
+                    <label for="sub0-1" class="sub-header">
+                        <div class="sub-cube-container">
+                            <div class="sub-cube">
+                                <div class="sub-cube-face front"></div>
+                                <div class="sub-cube-face back"></div>
+                                <div class="sub-cube-face right"></div>
+                                <div class="sub-cube-face left"></div>
+                                <div class="sub-cube-face top"></div>
+                                <div class="sub-cube-face bottom"></div>
+                            </div>
+                        </div>
+                        <span class="sub-title">Motive</span>
+                        <svg class="sub-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </label>
+                    <div class="sub-content">
+                        <p class="sub-content-text">
+<p><i>"I believe the best way to learn cybersecurity is by building, breaking, fixing, and
+documenting real systems." </i></p>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+<!-- BEGINNING OF CYBER PROJECTS -->
+    <div class="container">
+        <h1>CYBER PROJECTS</h1>
+
+        <!-- Section 1 HOMELAB -->
+        <div class="index-section">
+            <input type="radio" name="section" id="section1">
+            <label for="section1" class="section-header">
+                <div class="cube-container">
+                    <div class="cube">
+                        <div class="cube-face front"></div>
+                        <div class="cube-face back"></div>
+                        <div class="cube-face right"></div>
+                        <div class="cube-face left"></div>
+                        <div class="cube-face top"></div>
+                        <div class="cube-face bottom"></div>
+                    </div>
+                </div>
+                <span class="section-title">Home Lab Infrastructure</span>
+                <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </label>
+            <div class="section-content">
+                <p class="content-text">
+My Home Lab Infrastructure serves as a dedicated environment for developing practical skills in cybersecurity, Linux administration, virtualization, and enterprise system management. Designed to replicate real-world IT scenarios, the lab provides a safe platform for deploying operating systems, experimenting with network configurations, testing security concepts, and gaining hands-on experience with the tools and workflows commonly used by system administrators and cybersecurity professionals.
+                </p>
+
+
+                <!-- Sub-section 1.1 -->
+                <div class="sub-section">
+                    <input type="checkbox" id="sub1-1">
+                    <label for="sub1-1" class="sub-header">
+                        <div class="sub-cube-container">
+                            <div class="sub-cube">
+                                <div class="sub-cube-face front"></div>
+                                <div class="sub-cube-face back"></div>
+                                <div class="sub-cube-face right"></div>
+                                <div class="sub-cube-face left"></div>
+                                <div class="sub-cube-face top"></div>
+                                <div class="sub-cube-face bottom"></div>
+                            </div>
+                        </div>
+                        <span class="sub-title">Linux & Virtualization</span>
+                        <svg class="sub-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </label>
+                    <div class="sub-content">
+                        <p class="sub-content-text">
+<p>Established a virtualized Linux environment to build foundational system administration and cybersecurity skills. Created bootable Linux installation media for device deployments, provisioned Debian and Kali Linux virtual machines using VirtualBox, and configured isolated lab environments for safely testing operating systems, software, and security concepts without impacting production systems.  <p> <br> <b>Technologies & Skills:</b><i> Linux • Virtualization • Debian • Kali Linux • VirtualBox </i></p> </p>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+<!-- Section 2 Network and Infrastructure -->
+        <div class="index-section">
+            <input type="radio" name="section" id="section2">
+            <label for="section2" class="section-header">
+                <div class="cube-container">
+                    <div class="cube">
+                        <div class="cube-face front"></div>
+                        <div class="cube-face back"></div>
+                        <div class="cube-face right"></div>
+                        <div class="cube-face left"></div>
+                        <div class="cube-face top"></div>
+                        <div class="cube-face bottom"></div>
+                    </div>
+                </div>
+                <span class="section-title">Networking & Infrastructure</span>
+                <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </label>
+            <div class="section-content">
+                <p class="content-text">
+This section focuses on designing, configuring, and securing network infrastructure within my home lab. Through practical projects involving routing, VPNs, DNS services, and virtual networking, I developed hands-on experience with network segmentation, secure remote access, traffic filtering, and infrastructure troubleshooting. These projects emphasize real-world networking concepts and security practices commonly found in enterprise environments while providing a reliable platform for experimentation and continuous learning.
+                </p>
+
+                <!-- Sub-section 2.1 -->
+                <div class="sub-section">
+                    <input type="checkbox" id="sub2-1">
+                    <label for="sub2-1" class="sub-header">
+                        <div class="sub-cube-container">
+                            <div class="sub-cube">
+                                <div class="sub-cube-face front"></div>
+                                <div class="sub-cube-face back"></div>
+                                <div class="sub-cube-face right"></div>
+                                <div class="sub-cube-face left"></div>
+                                <div class="sub-cube-face top"></div>
+                                <div class="sub-cube-face bottom"></div>
+                            </div>
+                        </div>
+                        <span class="sub-title">VPN KILL SWITCH</span>
+                        <svg class="sub-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </label>
+                    <div class="sub-content">
+                        <p class="sub-content-text">
+<p>Designed and implemented a firewall-based VPN kill switch that prevents virtual machines from accessing the internet unless an active VPN connection is established. The solution automatically blocks outbound traffic during VPN interruptions and restores connectivity once the secure tunnel reconnects, replicating security controls commonly deployed within corporate VPN gateways, penetration testing environments, privacy-focused networks, and isolated virtual sandboxes. </p> <br> <p> <b>Technologies & Skills:</b><i> Firewall Policies • VPN • Network Security • Traffic Filtering • Virtual Machines </i></p>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Sub-section 2.2 -->
+                <div class="sub-section">
+                    <input type="checkbox" id="sub2-2">
+                    <label for="sub2-2" class="sub-header">
+                        <div class="sub-cube-container">
+                            <div class="sub-cube">
+                                <div class="sub-cube-face front"></div>
+                                <div class="sub-cube-face back"></div>
+                                <div class="sub-cube-face right"></div>
+                                <div class="sub-cube-face left"></div>
+                                <div class="sub-cube-face top"></div>
+                                <div class="sub-cube-face bottom"></div>
+                            </div>
+                        </div>
+                        <span class="sub-title">Bridged Virtual Netowrk</span>
+                        <svg class="sub-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </label>
+                    <div class="sub-content">
+                        <p class="sub-content-text">
+<p>Configured bridged networking to allow virtual machines to communicate directly with physical devices on the local network, closely simulating production network environments. Implemented Linux bridge networking, diagnosed connectivity issues, and resolved network loops using Spanning Tree Protocol (STP) to maintain stable and reliable network operation. </p> <p><br><b>Technologies & Skills:</b><i> Linux Networking • Bridged Networking • VirtualBox • STP • Network Troubleshooting </i></p>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Sub-section 2.3 -->
+                <div class="sub-section">
+                    <input type="checkbox" id="sub2-3">
+                    <label for="sub2-3" class="sub-header">
+                        <div class="sub-cube-container">
+                            <div class="sub-cube">
+                                <div class="sub-cube-face front"></div>
+                                <div class="sub-cube-face back"></div>
+                                <div class="sub-cube-face right"></div>
+                                <div class="sub-cube-face left"></div>
+                                <div class="sub-cube-face top"></div>
+                                <div class="sub-cube-face bottom"></div>
+                            </div>
+                        </div>
+                        <span class="sub-title">Router Configuration</span>
+                        <svg class="sub-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </label>
+                    <div class="sub-content">
+                        <p class="sub-content-text">
+<p>Configured home network infrastructure to improve security and remote accessibility through logical network segmentation and VPN deployment. Created a dedicated IoT network to isolate connected devices, deployed a WireGuard VPN server for encrypted remote access, and implemented secure connectivity for accessing home services from external networks. </p> <p><br><b>Technologies & Skills:</b><i> WireGuard • Network Segmentation • Router Configuration • VPN • Secure Remote Access</i></p>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Sub-section 2.4 -->
+                <div class="sub-section">
+                    <input type="checkbox" id="sub2-4">
+                    <label for="sub2-4" class="sub-header">
+                        <div class="sub-cube-container">
+                            <div class="sub-cube">
+                                <div class="sub-cube-face front"></div>
+                                <div class="sub-cube-face back"></div>
+                                <div class="sub-cube-face right"></div>
+                                <div class="sub-cube-face left"></div>
+                                <div class="sub-cube-face top"></div>
+                                <div class="sub-cube-face bottom"></div>
+                            </div>
+                        </div>
+                        <span class="sub-title">DNS Filtering</span>
+                        <svg class="sub-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </label>
+                    <div class="sub-content">
+                        <p class="sub-content-text">
+<p>Implemented network-wide DNS filtering to improve privacy, reduce unwanted advertising, and block known malicious domains across all connected devices. Initially deployed Pi-hole before migrating to AdGuard Home to evaluate alternative DNS filtering platforms and compare their features, management capabilities, and performance within a self-hosted environment. </p> <p><br><b>Technologies & Skills:</b><i> Pi-hole • AdGuard Home • DNS • Network Security • Self-Hosting</i></p>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Section 3 -->
+        <div class="index-section">
+            <input type="radio" name="section" id="section3">
+            <label for="section3" class="section-header">
+                <div class="cube-container">
+                    <div class="cube">
+                        <div class="cube-face front"></div>
+                        <div class="cube-face back"></div>
+                        <div class="cube-face right"></div>
+                        <div class="cube-face left"></div>
+                        <div class="cube-face top"></div>
+                        <div class="cube-face bottom"></div>
+                    </div>
+                </div>
+                <span class="section-title">Vurnelability Management </span>
+                <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </label>
+            <div class="section-content">
+                <p class="content-text">
+This section showcases the deployment and use of vulnerability management tools to identify, assess, and understand security weaknesses within a controlled lab environment. By performing internal network assessments and vulnerability scans against self-hosted systems, these projects demonstrate practical experience with security auditing, asset discovery, and risk identification while reinforcing defensive cybersecurity practices and system hardening techniques.
+                </p>
+
+
+                <!-- Sub-section 3.1 -->
+                <div class="sub-section">
+                    <input type="checkbox" id="sub3-1">
+                    <label for="sub3-1" class="sub-header">
+                        <div class="sub-cube-container">
+                            <div class="sub-cube">
+                                <div class="sub-cube-face front"></div>
+                                <div class="sub-cube-face back"></div>
+                                <div class="sub-cube-face right"></div>
+                                <div class="sub-cube-face left"></div>
+                                <div class="sub-cube-face top"></div>
+                                <div class="sub-cube-face bottom"></div>
+                            </div>
+                        </div>
+                        <span class="sub-title">OpenVas Scanner</span>
+                        <svg class="sub-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </label>
+                    <div class="sub-content">
+                        <p class="sub-content-text">
+<p>Deployed OpenVAS on an Ubuntu Server virtual machine to perform vulnerability assessments across the home lab environment. Configured the platform to conduct host discovery, internal network scanning, and vulnerability analysis of systems accessible through bridged networking. This project provided hands-on experience with identifying security weaknesses, interpreting scan results, and evaluating the security posture of lab infrastructure using industry-recognized vulnerability management tools.</p> <p><br><b>Technologies & Skills:</b><i> OpenVAS • Ubuntu Server • Vulnerability Assessment • Host Discovery • Network Security • Security Scanning • Linux</i></p>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+<!-- Section 4 -->
+        <div class="index-section">
+            <input type="radio" name="section" id="section4">
+            <label for="section4" class="section-header">
+                <div class="cube-container">
+                    <div class="cube">
+                        <div class="cube-face front"></div>
+                        <div class="cube-face back"></div>
+                        <div class="cube-face right"></div>
+                        <div class="cube-face left"></div>
+                        <div class="cube-face top"></div>
+                        <div class="cube-face bottom"></div>
+                    </div>
+                </div>
+                <span class="section-title">Threat Intelligence </span>
+                <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </label>
+            <div class="section-content">
+                <p class="content-text">
+This section focuses on collecting, aggregating, and managing cyber threat intelligence through automation. By integrating data from trusted public intelligence sources and security news platforms, these projects demonstrate practical experience in threat monitoring, indicator collection, and intelligence enrichment. The goal is to build a foundation for proactive security analysis, enabling faster identification of emerging threats and supporting future detection, investigation, and defensive security initiatives.
+                </p>
+
+                <!-- Sub-section 4.1 -->
+                <div class="sub-section">
+                    <input type="checkbox" id="sub4-1">
+                    <label for="sub4-1" class="sub-header">
+                        <div class="sub-cube-container">
+                            <div class="sub-cube">
+                                <div class="sub-cube-face front"></div>
+                                <div class="sub-cube-face back"></div>
+                                <div class="sub-cube-face right"></div>
+                                <div class="sub-cube-face left"></div>
+                                <div class="sub-cube-face top"></div>
+                                <div class="sub-cube-face bottom"></div>
+                            </div>
+                        </div>
+                        <span class="sub-title">Discord RSS Feed</span>
+                        <svg class="sub-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </label>
+                    <div class="sub-content">
+                        <p class="sub-content-text">
+<p>Developed an automated Discord-based news feed that aggregates cybersecurity updates from trusted industry sources, including Hacker News and BleepingComputer. The system delivers timely security news directly to dedicated Discord channels, creating a centralized location for monitoring emerging vulnerabilities, cyber incidents, and industry developments while reducing the need to manually track multiple websites. </p><p><br><b>Technologies & Skills:</b><i> Discord • RSS • Automation • Python • Cyber Threat Intelligence • News Aggregation</i></p>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Sub-section 4.2 -->
+                <div class="sub-section">
+                    <input type="checkbox" id="sub4-2">
+                    <label for="sub4-2" class="sub-header">
+                        <div class="sub-cube-container">
+                            <div class="sub-cube">
+                                <div class="sub-cube-face front"></div>
+                                <div class="sub-cube-face back"></div>
+                                <div class="sub-cube-face right"></div>
+                                <div class="sub-cube-face left"></div>
+                                <div class="sub-cube-face top"></div>
+                                <div class="sub-cube-face bottom"></div>
+                            </div>
+                        </div>
+                        <span class="sub-title">IOC Collector</span>
+                        <svg class="sub-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </label>
+                    <div class="sub-content">
+                        <p class="sub-content-text">
+<p>Developed an automated collection pipeline for retrieving Indicators of Compromise (IOCs) from public threat intelligence feeds, including URLHaus and OpenPhish. The system downloads and processes threat data for use in future analysis, detection engineering, and intelligence enrichment, providing a scalable foundation for integrating malicious URLs, domains, and phishing indicators into security workflows. </p><p><br><b>Technologies & Skills:</b><i> Threat Intelligence • IOC Collection • URLHaus • OpenPhish • Automation • Python • Data Processing</i></p>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Section 5 -->
+        <div class="index-section">
+            <input type="radio" name="section" id="section5">
+            <label for="section5" class="section-header">
+                <div class="cube-container">
+                    <div class="cube">
+                        <div class="cube-face front"></div>
+                        <div class="cube-face back"></div>
+                        <div class="cube-face right"></div>
+                        <div class="cube-face left"></div>
+                        <div class="cube-face top"></div>
+                        <div class="cube-face bottom"></div>
+                    </div>
+                </div>
+                <span class="section-title">Artificial Intelligence Projects</span>
+                <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </label>
+            <div class="section-content">
+                <p class="content-text">
+This section explores the practical application of artificial intelligence through self-hosted language models, retrieval-augmented systems, and AI-driven security automation. By deploying models locally and integrating them into custom workflows, these projects demonstrate hands-on experience with building privacy-focused AI solutions, developing intelligent automation, and applying large language models to real-world cybersecurity and system administration tasks.
+                </p>
+
+                <!-- Sub-section 5.1 -->
+                <div class="sub-section">
+                    <input type="checkbox" id="sub5-1">
+                    <label for="sub5-1" class="sub-header">
+                        <div class="sub-cube-container">
+                            <div class="sub-cube">
+                                <div class="sub-cube-face front"></div>
+                                <div class="sub-cube-face back"></div>
+                                <div class="sub-cube-face right"></div>
+                                <div class="sub-cube-face left"></div>
+                                <div class="sub-cube-face top"></div>
+                                <div class="sub-cube-face bottom"></div>
+                            </div>
+                        </div>
+                        <span class="sub-title">Local AI Environment</span>
+                        <svg class="sub-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </label>
+                    <div class="sub-content">
+                        <p class="sub-content-text">
+<p>Built a fully self-hosted AI environment capable of running large language models entirely on local hardware, eliminating reliance on cloud-based AI services. Deployed and evaluated multiple open-source models, including DeepSeek and several Qwen variants, to explore model capabilities, local inference, and AI-assisted development while maintaining complete control over data privacy and system configuration. </p> <p><br><b>Technologies & Skills:</b><i> Local LLMs • DeepSeek • Qwen • AI Infrastructure • Self-Hosting • Linux</i></p>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Sub-section 5.2 -->
+                <div class="sub-section">
+                    <input type="checkbox" id="sub5-2">
+                    <label for="sub5-2" class="sub-header">
+                        <div class="sub-cube-container">
+                            <div class="sub-cube">
+                                <div class="sub-cube-face front"></div>
+                                <div class="sub-cube-face back"></div>
+                                <div class="sub-cube-face right"></div>
+                                <div class="sub-cube-face left"></div>
+                                <div class="sub-cube-face top"></div>
+                                <div class="sub-cube-face bottom"></div>
+                            </div>
+                        </div>
+                        <span class="sub-title">AI Windows Event Log Analyze</span>
+                        <svg class="sub-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </label>
+                    <div class="sub-content">
+                        <p class="sub-content-text">
+<p>Developed an AI-assisted Windows Event Log analysis pipeline to automate the review of security events and support incident investigations. Windows Event Logs are exported using PowerShell, processed with Python, and analysed by locally hosted language models to identify suspicious activity. The system generates concise investigation reports that summarize notable events, helping streamline log analysis and improve security monitoring workflows.</p><p><br><b>Technologies & Skills:</b><i> Windows Event Logs • PowerShell • Python • Local LLMs • Security Analysis • AI Automation • Incident Investigation</i></p>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Sub-section 5.3 -->
+                <div class="sub-section">
+                    <input type="checkbox" id="sub5-3">
+                    <label for="sub5-3" class="sub-header">
+                        <div class="sub-cube-container">
+                            <div class="sub-cube">
+                                <div class="sub-cube-face front"></div>
+                                <div class="sub-cube-face back"></div>
+                                <div class="sub-cube-face right"></div>
+                                <div class="sub-cube-face left"></div>
+                                <div class="sub-cube-face top"></div>
+                                <div class="sub-cube-face bottom"></div>
+                            </div>
+                        </div>
+                        <span class="sub-title">Retrieval-Augmented Generation (RAG)</span>
+                        <svg class="sub-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </label>
+                    <div class="sub-content">
+                        <p class="sub-content-text">
+<p>Developed a Retrieval-Augmented Generation (RAG) system that enhances AI responses by retrieving relevant information from external knowledge sources before generating output. The implementation combines document retrieval, prompt augmentation, and local language models to produce more accurate, context-aware, and knowledge-driven responses while reducing the likelihood of hallucinated information. </p> <p><br><b>Technologies & Skills:</b><i> Retrieval-Augmented Generation (RAG) • Local LLMs • Prompt Engineering • Context Retrieval • Vector Search • Python</i></p>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+<!-- Section 6 -->
+        <div class="index-section">
+            <input type="radio" name="section" id="section6">
+            <label for="section6" class="section-header">
+                <div class="cube-container">
+                    <div class="cube">
+                        <div class="cube-face front"></div>
+                        <div class="cube-face back"></div>
+                        <div class="cube-face right"></div>
+                        <div class="cube-face left"></div>
+                        <div class="cube-face top"></div>
+                        <div class="cube-face bottom"></div>
+                    </div>
+                </div>
+                <span class="section-title">Security & Automation Scripts</span>
+                <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </label>
+            <div class="section-content">
+                <p class="content-text">
+This section showcases a collection of custom utilities developed to automate common security, system administration, and productivity tasks. Built primarily with Python, these scripts streamline repetitive workflows, improve operational efficiency, and reinforce secure computing practices. Each project focuses on solving practical problems through automation while demonstrating experience in scripting, security tooling, and software development.
+                </p>
+
+                <!-- Sub-section 6.1 -->
+                <div class="sub-section">
+                    <input type="checkbox" id="sub6-1">
+                    <label for="sub6-1" class="sub-header">
+                        <div class="sub-cube-container">
+                            <div class="sub-cube">
+                                <div class="sub-cube-face front"></div>
+                                <div class="sub-cube-face back"></div>
+                                <div class="sub-cube-face right"></div>
+                                <div class="sub-cube-face left"></div>
+                                <div class="sub-cube-face top"></div>
+                                <div class="sub-cube-face bottom"></div>
+                            </div>
+                        </div>
+                        <span class="sub-title">Password Generator</span>
+                        <svg class="sub-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </label>
+                    <div class="sub-content">
+                        <p class="sub-content-text">
+<p>Developed a local password generation utility capable of creating strong, randomized passwords suitable for modern security requirements. Inspired by the password generation functionality of LastPass, the tool generates complex credentials without relying on external services, ensuring passwords remain private and are created entirely on the local system. </p><p><br><b>Technologies & Skills:</b><i> Python • Password Security • Cryptographic Randomization • Local Utilities</i></p>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Sub-section 6.2 -->
+                <div class="sub-section">
+                    <input type="checkbox" id="sub6-2">
+                    <label for="sub6-2" class="sub-header">
+                        <div class="sub-cube-container">
+                            <div class="sub-cube">
+                                <div class="sub-cube-face front"></div>
+                                <div class="sub-cube-face back"></div>
+                                <div class="sub-cube-face right"></div>
+                                <div class="sub-cube-face left"></div>
+                                <div class="sub-cube-face top"></div>
+                                <div class="sub-cube-face bottom"></div>
+                            </div>
+                        </div>
+                        <span class="sub-title">VPN IP Checker</span>
+                        <svg class="sub-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </label>
+                    <div class="sub-content">
+                        <p class="sub-content-text">
+<p>Developed a lightweight utility to verify VPN connectivity by retrieving and displaying the system's public IP address. The script provides a quick method for confirming that internet traffic is being routed through the expected VPN endpoint, helping validate secure connections before performing security testing or accessing remote resources. </p> <p><br><b>Technologies & Skills:</b><i> Python • VPN • Networking • IP Address Validation • Automation</i></p>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Sub-section 6.3 -->
+                <div class="sub-section">
+                    <input type="checkbox" id="sub6-3">
+                    <label for="sub6-3" class="sub-header">
+                        <div class="sub-cube-container">
+                            <div class="sub-cube">
+                                <div class="sub-cube-face front"></div>
+                                <div class="sub-cube-face back"></div>
+                                <div class="sub-cube-face right"></div>
+                                <div class="sub-cube-face left"></div>
+                                <div class="sub-cube-face top"></div>
+                                <div class="sub-cube-face bottom"></div>
+                            </div>
+                        </div>
+                        <span class="sub-title">SHA & File Integrity Checker</span>
+                        <svg class="sub-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </label>
+                    <div class="sub-content">
+                        <p class="sub-content-text">
+<p>Developed a file integrity verification tool that calculates SHA hashes to validate file authenticity and detect unintended modifications. The application also performs VirusTotal hash lookups without uploading the original files, allowing users to check whether a file is already known to security vendors. Designed with software verification and supply chain security in mind, the tool supports safer validation of downloaded files while preserving user privacy.</p><p><br><b>Technologies & Skills:</b><i> Python • SHA Hashing • File Integrity • VirusTotal API • Supply Chain Security • Cybersecurity</i></p>
+                        </p>
+                    </div>
+                </div>
+
+
+
+                <!-- Sub-section 6.4 -->
+                <div class="sub-section">
+                    <input type="checkbox" id="sub6-4">
+                    <label for="sub6-4" class="sub-header">
+                        <div class="sub-cube-container">
+                            <div class="sub-cube">
+                                <div class="sub-cube-face front"></div>
+                                <div class="sub-cube-face back"></div>
+                                <div class="sub-cube-face right"></div>
+                                <div class="sub-cube-face left"></div>
+                                <div class="sub-cube-face top"></div>
+                                <div class="sub-cube-face bottom"></div>
+                            </div>
+                        </div>
+                        <span class="sub-title">MP3 Duration Checker</span>
+                        <svg class="sub-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </label>
+                    <div class="sub-content">
+                        <p class="sub-content-text">
+<p>Developed a utility for automatically calculating the total duration of audiobook collections and managing MP3 metadata. Using the Python Mutagen library, the tool reads audio file information, updates metadata such as titles, and supports batch processing tasks, simplifying the organization and management of large audio libraries. </p><p><br><b>Technologies & Skills:</b><i> Python • Mutagen • MP3 Metadata • Audio Processing • Automation • Batch Processing</i></p>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+<!-- Section 7 -->
+        <div class="index-section">
+            <input type="radio" name="section" id="section7">
+            <label for="section7" class="section-header">
+                <div class="cube-container">
+                    <div class="cube">
+                        <div class="cube-face front"></div>
+                        <div class="cube-face back"></div>
+                        <div class="cube-face right"></div>
+                        <div class="cube-face left"></div>
+                        <div class="cube-face top"></div>
+                        <div class="cube-face bottom"></div>
+                    </div>
+                </div>
+                <span class="section-title">Mobile Security Research</span>
+                <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </label>
+            <div class="section-content">
+                <p class="content-text">
+This section explores mobile cybersecurity through hands-on experimentation with Android-based security tools and self-hosted networking solutions. By transforming a spare Android device into a portable security testing platform, these projects demonstrate practical experience with secure remote access, network services, and mobile penetration testing concepts within controlled and ethical laboratory environments.
+                </p>
+
+                <!-- Sub-section 7.1 -->
+                <div class="sub-section">
+                    <input type="checkbox" id="sub7-1">
+                    <label for="sub7-1" class="sub-header">
+                        <div class="sub-cube-container">
+                            <div class="sub-cube">
+                                <div class="sub-cube-face front"></div>
+                                <div class="sub-cube-face back"></div>
+                                <div class="sub-cube-face right"></div>
+                                <div class="sub-cube-face left"></div>
+                                <div class="sub-cube-face top"></div>
+                                <div class="sub-cube-face bottom"></div>
+                            </div>
+                        </div>
+                        <span class="sub-title">Kali NetHunter</span>
+                        <svg class="sub-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </label>
+                    <div class="sub-content">
+                        <p class="sub-content-text">
+<p>Installed and configured Kali NetHunter on a dedicated Android device to explore mobile security capabilities within a controlled home lab. Conducted experiments with Cloudflare Tunnel for secure remote connectivity, hosted files over HTTPS, implemented QR code-based file distribution, and demonstrated network logging techniques for educational purposes. These projects provided practical experience with mobile security tooling, remote access technologies, and portable cybersecurity workflows while maintaining a focus on ethical testing and controlled environments. </p><p><br><b>Technologies & Skills:</b><i> Kali NetHunter • Android • Cloudflare Tunnel • HTTPS • QR Codes • Network Logging • Mobile Security • Linux • Cybersecurity</i></p>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+<!-- Section 8 -->
+        <div class="index-section">
+            <input type="radio" name="section" id="section8">
+            <label for="section8" class="section-header">
+                <div class="cube-container">
+                    <div class="cube">
+                        <div class="cube-face front"></div>
+                        <div class="cube-face back"></div>
+                        <div class="cube-face right"></div>
+                        <div class="cube-face left"></div>
+                        <div class="cube-face top"></div>
+                        <div class="cube-face bottom"></div>
+                    </div>
+                </div>
+                <span class="section-title">Embedded Systems & Smart Home</span>
+                <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </label>
+            <div class="section-content">
+                <p class="content-text">
+This section highlights hands-on experience with embedded systems, microcontrollers, and basic electronics through practical hardware projects. By combining sensor integration, microcontroller programming, and network connectivity, these projects demonstrate foundational knowledge of Internet of Things (IoT) technologies, data acquisition, hardware troubleshooting, and the development of simple smart home solutions that bridge software and physical devices.
+                </p>
+
+                <!-- Sub-section 8.1 -->
+                <div class="sub-section">
+                    <input type="checkbox" id="sub8-1">
+                    <label for="sub8-1" class="sub-header">
+                        <div class="sub-cube-container">
+                            <div class="sub-cube">
+                                <div class="sub-cube-face front"></div>
+                                <div class="sub-cube-face back"></div>
+                                <div class="sub-cube-face right"></div>
+                                <div class="sub-cube-face left"></div>
+                                <div class="sub-cube-face top"></div>
+                                <div class="sub-cube-face bottom"></div>
+                            </div>
+                        </div>
+                        <span class="sub-title">Arduino</span>
+                        <svg class="sub-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </label>
+                    <div class="sub-content">
+                        <p class="sub-content-text">
+<p>Developed sensor-based projects using the Arduino platform to collect and monitor environmental data. Integrated a DHT11 temperature and humidity sensor to acquire real-time readings, gaining practical experience with sensor communication, microcontroller programming, and data acquisition for embedded and IoT applications.</p> <p><br><b>Technologies & Skills:</b><i> Arduino • DHT11 • Embedded Systems • Sensor Integration • Data Acquisition • C++</i></p>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Sub-section 8.2 -->
+                <div class="sub-section">
+                    <input type="checkbox" id="sub8-2">
+                    <label for="sub8-2" class="sub-header">
+                        <div class="sub-cube-container">
+                            <div class="sub-cube">
+                                <div class="sub-cube-face front"></div>
+                                <div class="sub-cube-face back"></div>
+                                <div class="sub-cube-face right"></div>
+                                <div class="sub-cube-face left"></div>
+                                <div class="sub-cube-face top"></div>
+                                <div class="sub-cube-face bottom"></div>
+                            </div>
+                        </div>
+                        <span class="sub-title">ESP32</span>
+                        <svg class="sub-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </label>
+                    <div class="sub-content">
+                        <p class="sub-content-text">
+<p>Built an ESP32-powered web server that publishes real-time environmental sensor readings through a browser-based interface. The project combines embedded programming with networking concepts, enabling remote monitoring of sensor data and providing practical experience with Wi-Fi-enabled microcontrollers and IoT application development. </p><p><br><b>Technologies & Skills:</b><i> ESP32 • IoT • Embedded Systems • Web Server • Wi-Fi • Sensor Monitoring</i></p>
+                        </p>
+                    </div>
+                </div>
+
+
+                <!-- Sub-section 8.3 -->
+                <div class="sub-section">
+                    <input type="checkbox" id="sub8-3">
+                    <label for="sub8-3" class="sub-header">
+                        <div class="sub-cube-container">
+                            <div class="sub-cube">
+                                <div class="sub-cube-face front"></div>
+                                <div class="sub-cube-face back"></div>
+                                <div class="sub-cube-face right"></div>
+                                <div class="sub-cube-face left"></div>
+                                <div class="sub-cube-face top"></div>
+                                <div class="sub-cube-face bottom"></div>
+                            </div>
+                        </div>
+                        <span class="sub-title">Electronics</span>
+                        <svg class="sub-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </label>
+                    <div class="sub-content">
+                        <p class="sub-content-text">
+<p>Developed practical electronics skills through circuit design, breadboard prototyping, and hardware troubleshooting. Constructed and tested electronic circuits, used a multimeter to diagnose electrical faults and verify component behaviour, and gained hands-on experience in debugging both hardware and software interactions within embedded system projects.</p><p><br><b>Technologies & Skills:</b><i> Electronics • Circuit Design • Breadboard Prototyping • Multimeter • Hardware Troubleshooting • Embedded Systems</i></p>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+<!-- ADD MORE IN FUTURE-->
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- FUTURE PROJECTS -->
+
+
+
+
+    <div class="container">
+        <h1>FUTURE PROJECTS</h1>
+
+        <!-- Section PORTFOLIO TOP -->
+        <div class="index-section">
+            <input type="radio" name="section" id="sectionPLANNED">
+            <label for="sectionPLANNED" class="section-header">
+                <div class="cube-container">
+                    <div class="cube">
+                        <div class="cube-face front"></div>
+                        <div class="cube-face back"></div>
+                        <div class="cube-face right"></div>
+                        <div class="cube-face left"></div>
+                        <div class="cube-face top"></div>
+                        <div class="cube-face bottom"></div>
+                    </div>
+                </div>
+                <span class="section-title">Current Projects and Ideas</span>
+                <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </label>
+            <div class="section-content">
+                <p class="content-text">
+This section outlines current and future projects focused on expanding my cybersecurity, threat intelligence, automation, and defensive security capabilities. These planned developments aim to integrate enterprise-grade security platforms, improve monitoring and detection capabilities, and explore the use of artificial intelligence for automating security operations. Each project is designed to extend the existing home lab environment while building practical experience with modern security technologies and workflows.</p>
+
+
+                <!-- SUB SECTION -->
+                <div class="sub-section">
+                    <input type="checkbox" id="subPLANNED-1">
+                    <label for="subPLANNED-1" class="sub-header">
+                        <div class="sub-cube-container">
+                            <div class="sub-cube">
+                                <div class="sub-cube-face front"></div>
+                                <div class="sub-cube-face back"></div>
+                                <div class="sub-cube-face right"></div>
+                                <div class="sub-cube-face left"></div>
+                                <div class="sub-cube-face top"></div>
+                                <div class="sub-cube-face bottom"></div>
+                            </div>
+                        </div>
+                        <span class="sub-title">OpenCTI</span>
+                        <svg class="sub-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </label>
+                    <div class="sub-content">
+                        <p class="sub-content-text">
+<p>Planned deployment of a self-hosted cyber threat intelligence platform using OpenCTI to collect, organize, and analyze threat intelligence data. The project will focus on building an intelligence management workflow capable of connecting threat feeds, tracking adversary information, managing indicators of compromise, and supporting future security investigations.</p><p><br>Technologies & Skills: OpenCTI • Threat Intelligence • IOC Management • Cyber Intelligence Platforms • Self-Hosting</p>
+                        </p>
+                    </div>
+                </div>
+
+                 <!-- SUB SECTION -->
+                <div class="sub-section">
+                    <input type="checkbox" id="subPLANNED-2">
+                    <label for="subPLANNED-2" class="sub-header">
+                        <div class="sub-cube-container">
+                            <div class="sub-cube">
+                                <div class="sub-cube-face front"></div>
+                                <div class="sub-cube-face back"></div>
+                                <div class="sub-cube-face right"></div>
+                                <div class="sub-cube-face left"></div>
+                                <div class="sub-cube-face top"></div>
+                                <div class="sub-cube-face bottom"></div>
+                            </div>
+                        </div>
+                        <span class="sub-title">Wazuh</span>
+                        <svg class="sub-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </label>
+                    <div class="sub-content">
+                        <p class="sub-content-text">
+<p>Planned deployment of Wazuh as a centralized security monitoring platform to provide endpoint visibility, log analysis, and security alerting across the home lab environment. The implementation will explore Security Information and Event Management (SIEM) capabilities, Endpoint Detection and Response (EDR/XDR) concepts, and automated detection of suspicious activity through collected system and network telemetry.</p><p><br>Technologies & Skills: Wazuh • SIEM • EDR/XDR • Log Monitoring • Security Alerting • Threat Detection</p>
+                        </p>
+                    </div>
+                </div>
+
+                 <!-- SUB SECTION -->
+                <div class="sub-section">
+                    <input type="checkbox" id="subPLANNED-3">
+                    <label for="subPLANNED-3" class="sub-header">
+                        <div class="sub-cube-container">
+                            <div class="sub-cube">
+                                <div class="sub-cube-face front"></div>
+                                <div class="sub-cube-face back"></div>
+                                <div class="sub-cube-face right"></div>
+                                <div class="sub-cube-face left"></div>
+                                <div class="sub-cube-face top"></div>
+                                <div class="sub-cube-face bottom"></div>
+                            </div>
+                        </div>
+                        <span class="sub-title">Proxy Testing Framework</span>
+                        <svg class="sub-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </label>
+                    <div class="sub-content">
+                        <p class="sub-content-text">
+<p>Planned development of an automated proxy testing framework designed to evaluate proxy reliability, security, and performance. The system will automate connectivity checks, anonymity validation, leak detection, and performance measurements to provide a structured method for analyzing proxy services and understanding network privacy mechanisms.</p><p><br>Technologies & Skills: Python • Networking • Proxy Analysis • Automation • Privacy Testing • Network Security</p>
+                        </p>
+                    </div>
+                </div>
+
+
+                 <!-- SUB SECTION -->
+                <div class="sub-section">
+                    <input type="checkbox" id="subPLANNED-4">
+                    <label for="subPLANNED-4" class="sub-header">
+                        <div class="sub-cube-container">
+                            <div class="sub-cube">
+                                <div class="sub-cube-face front"></div>
+                                <div class="sub-cube-face back"></div>
+                                <div class="sub-cube-face right"></div>
+                                <div class="sub-cube-face left"></div>
+                                <div class="sub-cube-face top"></div>
+                                <div class="sub-cube-face bottom"></div>
+                            </div>
+                        </div>
+                        <span class="sub-title">AI Threat Intelligence Automation</span>
+                        <svg class="sub-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </label>
+                    <div class="sub-content">
+                        <p class="sub-content-text">
+<p>Planned integration of local AI models with threat intelligence platforms such as OpenCTI and MISP to automate intelligence processing workflows. The system will analyze threat reports, summarize security information, extract Indicators of Compromise (IOCs), and assist with analyst tasks by transforming large volumes of threat data into actionable intelligence.</p><p><br>Technologies & Skills: Local LLMs • OpenCTI • MISP • Threat Intelligence • AI Automation • IOC Extraction • Security Operations</p>
+                        </p>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script>
+        // Dark mode detection
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.add('light');
+        }
+
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.remove('light');
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+                document.documentElement.classList.add('light');
+            }
+        });
+
+        // Add idle rotation to cubes
+        document.addEventListener('DOMContentLoaded', () => {
+            const cubes = document.querySelectorAll('.cube, .sub-cube');
+
+            cubes.forEach(cube => {
+                cube.addEventListener('mouseenter', () => {
+                    const currentTransform = cube.style.transform || '';
+                    cube.style.transform = currentTransform + ' rotateY(15deg) rotateX(15deg)';
+                });
+
+                cube.addEventListener('mouseleave', () => {
+                    cube.style.transform = '';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
